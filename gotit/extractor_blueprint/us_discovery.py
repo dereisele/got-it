@@ -1,9 +1,9 @@
 from . import basic
 
+
 class Extractor(basic.Extractor):
 
-
-    networks= ("SCI", "APL", "DSC")
+    networks = ("SCI", "APL", "DSC")
 
     URL_SHOWS = "https://api.discovery.com/v1/content/shows?limit=10&networks_code={network}&offset={offset}&platform=desktop&sort=-video.airDate.type%28episode%7Climited%7Cevent%7Cstunt%7Cextra%29"
     URL_AUTH = "https://www.sciencechannel.com/anonymous?authRel=authorization&redirectUri=http%3A%2F%2Fnothing.com%3Fhttps%3A%2F%2Fwww.discovery.com"
@@ -23,7 +23,6 @@ class Extractor(basic.Extractor):
 
     def _getShows(self):
         done = False
-        #shows = []
         headers = {"authorization": "Bearer " + self.BEARER}
         offset = 0
 
@@ -36,17 +35,42 @@ class Extractor(basic.Extractor):
 
             for show in j:
                 show_dict = {
-                            "title": show["name"],
-                            "lang": self.LANG,
-                            "x-disc-show-id": show["id"],
-                            }
+                    "name": show["name"],
+                    "lang": self.LANG,
+                    "url": show["socialUrl"],
+                    "x": {
+                        "x_dsc_show_id": show["id"],
+                    }}
                 yield show_dict
-                #shows.append(show_dict)
 
-        #return(shows)
-
-    def _getSeasons(self, show):
+    def _getSeasons(self, x_dsc_show_id):
         headers = {"authorization": "Bearer " + self.BEARER}
-        url = self.URL_SEASONS.format(showID=show["x-disc-show-id"])
+        url = self.URL_SEASONS.format(showID=x_dsc_show_id)
         j = self.loadJson(url, headers=headers)
-        return j
+
+        for season in j:
+            season_dict = {
+                "number": season["number"],
+                "name": season["name"],
+                "x": {
+                    "x_dsc_show_id": season["show"]["id"],
+                    "x_dsc_season_id": season["id"],
+                }}
+            yield season_dict
+
+    def _getEpisodes(self, x_dsc_season_id):
+        headers = {"authorization": "Bearer " + self.BEARER}
+        url = self.URL_EPISODES.format(seasonID=x_dsc_season_id)
+        j = self.loadJson(url, headers=headers)
+        for episode in j:
+            episode_dict = {
+                "number": episode["episodeNumber"],
+                "name": episode["name"],
+                "authenticated": episode["authenticated"],
+                "url": episode["socialUrl"],
+                "x": {
+                    "x_dsc_show_id": episode["show"]["id"],
+                    "x_dsc_season_id": episode["season"]["id"],
+                    "x_dsc_episode_id": episode["id"],
+                }}
+            yield episode_dict

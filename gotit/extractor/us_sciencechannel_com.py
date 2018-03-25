@@ -1,7 +1,7 @@
 from gotit.extractor_blueprint import us_discovery
 from pprint import pprint
 from multiprocessing.pool import Pool
-from time import sleep
+
 
 class Extractor(us_discovery.Extractor):
     BASE_URL = "https://www.sciencechannel.com/"
@@ -19,4 +19,6 @@ class Extractor(us_discovery.Extractor):
             pprint(rst)
         """
         show = next(self._getShows())
-        pprint(self._getSeasons(show))
+        season = next(self._getSeasons(show["x"]["x_dsc_show_id"]))
+        episode = next(self._getEpisodes(season["x"]["x_dsc_season_id"]))
+        pprint(episode)
