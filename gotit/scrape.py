@@ -1,5 +1,7 @@
 from pluginbase import PluginBase
 from pprint import pprint
+import gotit
+from .pipelines import ShowPipeline
 
 class ScrapeManager(object):
 
@@ -8,6 +10,9 @@ class ScrapeManager(object):
         self.extractors = {}
 
         self.initPlugins()
+        self.initPipelines()
+
+        self.scrapeShows()
 
     def initPlugins(self):
         self.plugin_base = PluginBase(package="gotit.extractors")
@@ -16,6 +21,19 @@ class ScrapeManager(object):
 
         pprint(self.plugin_source.list_plugins())
 
+    def initPipelines(self):
+        self.showPip = ShowPipeline()
+
+    def scrape(self):
         for plugin_name in self.plugin_source.list_plugins():
             plugin = self.plugin_source.load_plugin(plugin_name)
             plugin.Extractor().extract()
+
+    def scrapeShows(self):
+        for plugin_name in self.plugin_source.list_plugins():
+            plugin = self.plugin_source.load_plugin(plugin_name)
+            shows = plugin.Extractor().extractShows()
+            print(plugin_name)
+            for show in shows:
+                self.showPip.insertShow(plugin_name, show)
+                pprint(show)
