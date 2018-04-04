@@ -16,7 +16,7 @@ class Extractor(basic.Extractor):
         episode = next(self._getEpisodes(show["x"]["x_cbs_show_id"]))
         pprint(episode)
 
-    def extract_shows(self):
+    def extractShows(self):
         return self._getShows()
 
     def _getShows(self):
@@ -26,6 +26,7 @@ class Extractor(basic.Extractor):
                 "name": show["title"],
                 "lang": self.LANG,
                 "url": show["showUrl"],
+                "year": 0000,
                 "x": {
                     "x_cbs_show_id": show["showId"],
                 }}

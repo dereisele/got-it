@@ -16,7 +16,7 @@ class Extractor(basic.Extractor):
 
     def extractShows(self):
         self._initBearer()
-        self._getShows()
+        return self._getShows()
 
     def _initBearer(self):
         self.BEARER = self.loadJson(self.URL_AUTH)["access_token"]
@@ -38,6 +38,7 @@ class Extractor(basic.Extractor):
                     "name": show["name"],
                     "lang": self.LANG,
                     "url": show["socialUrl"],
+                    "year": 0000,
                     "x": {
                         "x_dsc_show_id": show["id"],
                     }}

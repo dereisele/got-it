@@ -19,7 +19,7 @@ class Extractor(basic.Extractor):
         episode = next(self._getEpisodes(season["x"]["x_funk_season_alias"]))
         pprint(episode)
 
-    def extract_shows(self):
+    def extractShows(self):
         return self._getShows()
 
     def _getShows(self):
@@ -30,6 +30,7 @@ class Extractor(basic.Extractor):
                     "name": show["title"],
                     "lang": self.LANG,
                     "url": self.URL_SHOW.format(alias=show["alias"]),
+                    "year": 0000,
                     "x": {
                         "x_funk_show_alias": show["alias"],
                     }}
