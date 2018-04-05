@@ -9,6 +9,7 @@ class Extractor(basic.Extractor):
     URL_SEASONS = "https://www.funk.net/api/v3.0/content/playlists/filter/?channelId={alias}&secondarySort=alias,ASC"
     URL_EPISODES = "https://www.funk.net/api/v3.0/content/playlists/{alias}/videos/?size=100&secondarySort=episodeNr,ASC"
     URL_EPISODE = "https://www.funk.net/channel/{showAlias}/{episodeAlias}/{seasonAlias}/"
+    headers = {"authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnROYW1lIjoiY3VyYXRpb24tdG9vbCIsInNjb3BlIjoic3RhdGljLWNvbnRlbnQtYXBpLGN1cmF0aW9uLWFwaSxzZWFyY2gtYXBpIn0.q4Y2xZG8PFHai24-4Pjx2gym9RmJejtmK6lMXP5wAgc"}
     LANG = "de"
 
     def extract(self):
@@ -21,6 +22,13 @@ class Extractor(basic.Extractor):
 
     def extractShows(self):
         return self._getShows()
+
+    def extractEpisodes(self, showref):
+        x = self.getX(showref)
+        # TODO: Ugly, but it woks
+        for season in self._getSeasons(x["x_funk_show_alias"]):
+            for episode in self._getEpisodes(season["x"]["x_funk_season_alias"]):
+                yield episode
 
     def _getShows(self):
         j = self.loadJson(self.URL_SHOWS)
@@ -38,13 +46,19 @@ class Extractor(basic.Extractor):
 
     def _getSeasons(self, x_funk_show_alias):
         url = self.URL_SEASONS.format(alias=x_funk_show_alias)
-        j = self.loadJson(url)
+        j = self.loadJson(url, headers=self.headers)
 
         alias = j["parentResult"]["alias"]
 
+        if not j["result"]:
+            return
+
         for season in j["result"]:
             ov = "(OV)" in season["title"]
-            number = season["alias"].split("staffel-")[1]
+            try:
+                number = season["alias"].split("staffel-")[1]
+            except(IndexError):
+                number = 0  # For extras
             season_dict = {
                 "number": number,
                 "name": season["title"],
@@ -57,10 +71,13 @@ class Extractor(basic.Extractor):
 
     def _getEpisodes(self, x_funk_season_alias):
         url = self.URL_EPISODES.format(alias=x_funk_season_alias)
-        j = self.loadJson(url)
+        j = self.loadJson(url, headers=self.headers)
 
         seasonAlias = j["parentResult"]["alias"]
         showAlias = seasonAlias.split("-staffel")[0]
+
+        if not j["result"]:
+            return  # YES, there are also empty seasons
 
         for episode in j["result"]:
             episode_dict = {

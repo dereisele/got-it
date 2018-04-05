@@ -18,6 +18,14 @@ class Extractor(basic.Extractor):
         self._initBearer()
         return self._getShows()
 
+    def extractEpisodes(self, showref):
+        self._initBearer()
+        x = self.getX(showref)
+        # TODO: Ugly, but it woks
+        for season in self._getSeasons(x["x_dsc_show_id"]):
+            for episode in self._getEpisodes(season["x"]["x_dsc_season_id"]):
+                yield episode
+
     def _initBearer(self):
         self.BEARER = self.loadJson(self.URL_AUTH)["access_token"]
 

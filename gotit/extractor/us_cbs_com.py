@@ -19,6 +19,10 @@ class Extractor(basic.Extractor):
     def extractShows(self):
         return self._getShows()
 
+    def extractEpisodes(self, show):
+        x = self.getX(show)
+        return self._getEpisodes(x["x_cbs_show_id"])
+
     def _getShows(self):
         j = self.loadJson(self.URL_SHOWS)
         for show in j["group"]["showGroupItems"]:
