@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy.orm import relationship
 from .dbmanager import base
 
 
@@ -21,5 +22,6 @@ class ShowScraperRef(base):
     id = Column(Integer, primary_key=True)
     show_id = Column(Integer, ForeignKey("shows.id"))
     scraper_id = Column(Integer, ForeignKey("scrapers.id"))
+    scraper = relationship("Scraper")
     url = Column(String)
     x = Column(String)
