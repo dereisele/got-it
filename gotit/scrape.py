@@ -1,7 +1,9 @@
 from pluginbase import PluginBase
 from pprint import pprint
+from json import loads
 import gotit
 from .pipelines import ShowPipeline
+from .dbmanager import getShows, getShowScraperRef
 
 class ScrapeManager(object):
 
@@ -12,7 +14,8 @@ class ScrapeManager(object):
         self.initPlugins()
         self.initPipelines()
 
-        self.scrapeShows()
+        #self.scrapeShows()
+        self.scrapeEpisodes()
 
     def initPlugins(self):
         self.plugin_base = PluginBase(package="gotit.extractors")
@@ -37,3 +40,17 @@ class ScrapeManager(object):
             for show in shows:
                 self.showPip.insertShow(plugin_name, show)
                 pprint(show)
+
+    def scrapeEpisodes(self, ignore_filter=False):
+        """Scrape episodes. ignore_filter: Filter if show is marked in db."""
+
+        for showref in getShowScraperRef(ignore_filter):
+            scraper = self.plugin_source.load_plugin(showref.scraper.string_id)
+            episodes = scraper.Extractor().extractEpisodes(showref)
+            if not episodes:
+                continue
+
+            for episode in episodes:
+                if not episode:
+                    continue
+                pprint(episode)
