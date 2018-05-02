@@ -1,7 +1,7 @@
 from sqlalchemy.orm import sessionmaker
 from json import dumps
 from .dbmanager import dbConnect, createTables, get_or_create
-from .models import Show, Scraper, ShowScraperRef
+from .models import Show, Scraper, ShowScraperRef, Season, Episode, EpisodeScraperRef
 
 
 class ShowPipeline(object):
@@ -25,3 +25,21 @@ class ShowPipeline(object):
                       show_id=dbShow.id,
                       x=dumps(show["x"]),
                       url=show["url"])
+
+    def insertEpisode(self, showref, episode):
+        session = self.Session()
+
+        dbSeason, _ = get_or_create(session, Season,
+                                    number=episode["season_number"],
+                                    show_id=showref.show_id)
+
+        dbEpisode, _ = get_or_create(session, Episode,
+                                     season_id=dbSeason.id,
+                                     number=episode["episode_number"],
+                                     name=episode["name"])
+
+        get_or_create(session, EpisodeScraperRef,
+                      episode_id=dbEpisode.id,
+                      scraper_id=showref.scraper_id,
+                      url=episode["url"],
+                      x=dumps(episode["x"]))
