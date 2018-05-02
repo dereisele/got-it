@@ -25,3 +25,32 @@ class ShowScraperRef(base):
     scraper = relationship("Scraper")
     url = Column(String)
     x = Column(String)
+
+
+class Season(base):
+    __tablename__ = "seasons"
+    id = Column(Integer, primary_key=True)
+    show_id = Column(Integer, ForeignKey("shows.id"))
+    show = relationship("Show")
+    number = Column(Integer)
+    name = Column(String)
+
+
+class Episode(base):
+    __tablename__ = "episodes"
+    id = Column(Integer, primary_key=True)
+    season_id = Column(Integer, ForeignKey("seasons.id"))
+    season = relationship("Season")
+    number = Column(Integer)
+    name = Column(String)
+    x = Column(String)
+
+
+class EpisodeScraperRef(base):
+    __tablename__ = "episode_scraper_ref"
+    id = Column(Integer, primary_key=True)
+    episode_id = Column(Integer, ForeignKey("episodes.id"))
+    scraper_id = Column(Integer, ForeignKey("scrapers.id"))
+    scraper = relationship("Scraper")
+    url = Column(String)
+    x = Column(String)
