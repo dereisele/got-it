@@ -73,23 +73,25 @@ class Extractor(basic.Extractor):
         url = self.URL_EPISODES.format(alias=x_funk_season_alias)
         j = self.loadJson(url, headers=self.headers)
 
-        seasonAlias = j["parentResult"]["alias"]
-        showAlias = seasonAlias.split("-staffel")[0]
+        season_alias = j["parentResult"]["alias"]
+        show_alias = season_alias.split("-staffel")[0]
 
         if not j["result"]:
             return  # YES, there are also empty seasons
 
         for episode in j["result"]:
+            pprint(episode)
             episode_dict = {
-                "number": episode["episodeNr"],
+                "episode_number": episode["episodeNr"],
+                "season_number": episode["seasonNr"],
                 "name": episode["title"],
                 "url": self.URL_EPISODE.format(
-                    showAlias=showAlias,
-                    seasonAlias=seasonAlias,
+                    showAlias=show_alias,
+                    seasonAlias=season_alias,
                     episodeAlias=episode["alias"]),
                 "x": {
-                    "x_funk_show_alias": showAlias,
-                    "x_funk_season_alias": seasonAlias,
+                    "x_funk_show_alias": show_alias,
+                    "x_funk_season_alias": season_alias,
                     "x_funk_episode_alias": episode["alias"],
                 }}
             yield episode_dict
