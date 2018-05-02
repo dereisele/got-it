@@ -1,6 +1,7 @@
 from pluginbase import PluginBase
 from pprint import pprint
 from json import loads
+import sys
 import gotit
 from .pipelines import ShowPipeline
 from .dbmanager import getShows, getShowScraperRef
@@ -14,7 +15,7 @@ class ScrapeManager(object):
         self.initPlugins()
         self.initPipelines()
 
-        #self.scrapeShows()
+        self.scrapeShows()
         self.scrapeEpisodes()
 
     def initPlugins(self):
@@ -53,4 +54,5 @@ class ScrapeManager(object):
             for episode in episodes:
                 if not episode:
                     continue
+                self.showPip.insertEpisode(showref, episode)
                 pprint(episode)
