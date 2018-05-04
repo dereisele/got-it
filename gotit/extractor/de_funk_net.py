@@ -12,7 +12,7 @@ class Extractor(basic.Extractor):
     headers = {"authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnROYW1lIjoiY3VyYXRpb24tdG9vbCIsInNjb3BlIjoic3RhdGljLWNvbnRlbnQtYXBpLGN1cmF0aW9uLWFwaSxzZWFyY2gtYXBpIn0.q4Y2xZG8PFHai24-4Pjx2gym9RmJejtmK6lMXP5wAgc"}
     LANG = "de"
 
-    def extract(self):
+    def extractTest(self):
         show = next(self._getShows())
         pprint(show)
         season = next(self._getSeasons(show["x"]["x_funk_show_alias"]))
@@ -80,7 +80,7 @@ class Extractor(basic.Extractor):
             return  # YES, there are also empty seasons
 
         for episode in j["result"]:
-            pprint(episode)
+            #pprint(episode)
             episode_dict = {
                 "episode_number": episode["episodeNr"],
                 "season_number": episode["seasonNr"],

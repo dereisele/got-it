@@ -9,7 +9,7 @@ class Extractor(basic.Extractor):
     URL_EPISODES = "https://www.cbs.com/carousels/shows/{showId}/offset/{offset}/limit/10/"
     LANG = "en"
 
-    def extract(self):
+    def extractTest(self):
         show = next(self._getShows())
         pprint(show)
 

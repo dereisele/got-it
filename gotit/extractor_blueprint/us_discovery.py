@@ -10,9 +10,14 @@ class Extractor(basic.Extractor):
     URL_SEASONS = "https://api.discovery.com/v1/content/seasons?excludeEmptySeasons=true&show.id={showID}"
     URL_EPISODES = "https://api.discovery.com/v1/content/videos?type=episode&season.id={seasonID}"
 
-    def extract(self):
+    def extractTest(self):
         self._initBearer()
-        self._getShows()
+        show = next(self._getShows())
+        pprint(show)
+        season = next(self._getSeasons(show["x"]["x_dsc_show_id"]))
+        pprint(season)
+        episode = next(self._getEpisodes(season["x"]["x_dsc_season_id"]))
+        pprint(episode)
 
     def extractShows(self):
         self._initBearer()
