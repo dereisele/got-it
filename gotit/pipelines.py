@@ -23,7 +23,7 @@ class ShowPipeline(object):
         get_or_create(session, ShowScraperRef,
                       scraper_id=dbScraper.id,
                       show_id=dbShow.id,
-                      x=dumps(show["x"]),
+                      x=dumps(show.get("x")),
                       url=show["url"])
 
     def insertEpisode(self, showref, episode):
@@ -42,4 +42,4 @@ class ShowPipeline(object):
                       episode_id=dbEpisode.id,
                       scraper_id=showref.scraper_id,
                       url=episode["url"],
-                      x=dumps(episode["x"]))
+                      x=dumps(episode.get("x")))
