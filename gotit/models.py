@@ -6,15 +6,15 @@ from .dbmanager import base
 class Show(base):
     __tablename__ = "shows"
     id = Column(Integer, primary_key=True)
-    name = Column(String)
+    name = Column(String(32))
     year = Column(Integer, nullable=True)
-    lang = Column(String)
+    lang = Column(String(8))
 
 
 class Scraper(base):
     __tablename__ = "scrapers"
     id = Column(Integer, primary_key=True)
-    string_id = Column(String)
+    string_id = Column(String(32))
 
 
 class ShowScraperRef(base):
@@ -23,8 +23,8 @@ class ShowScraperRef(base):
     show_id = Column(Integer, ForeignKey("shows.id"))
     scraper_id = Column(Integer, ForeignKey("scrapers.id"))
     scraper = relationship("Scraper")
-    url = Column(String)
-    x = Column(String)
+    url = Column(String(96))
+    x = Column(String(64))
 
 
 class Season(base):
@@ -33,7 +33,7 @@ class Season(base):
     show_id = Column(Integer, ForeignKey("shows.id"))
     show = relationship("Show")
     number = Column(Integer)
-    name = Column(String)
+    name = Column(String(32))
 
 
 class Episode(base):
@@ -42,8 +42,8 @@ class Episode(base):
     season_id = Column(Integer, ForeignKey("seasons.id"))
     season = relationship("Season")
     number = Column(Integer)
-    name = Column(String)
-    x = Column(String)
+    name = Column(String(32))
+    x = Column(String(64))
 
 
 class EpisodeScraperRef(base):
@@ -52,5 +52,5 @@ class EpisodeScraperRef(base):
     episode_id = Column(Integer, ForeignKey("episodes.id"))
     scraper_id = Column(Integer, ForeignKey("scrapers.id"))
     scraper = relationship("Scraper")
-    url = Column(String)
-    x = Column(String)
+    url = Column(String(96))
+    x = Column(String(64))
