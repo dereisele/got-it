@@ -8,7 +8,7 @@ base = declarative_base()
 from .models import Show, ShowScraperRef, Scraper
 
 def dbConnect():
-    return create_engine("sqlite:////home/alexander/gotit.db")
+    return create_engine("mysql+mysqlconnector://python:python-passwd@localhost/python")
 
 def createTables(engine):
     base.metadata.create_all(engine)
