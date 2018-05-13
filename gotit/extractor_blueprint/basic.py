@@ -19,10 +19,16 @@ class Extractor(object):
         return j
 
     def loadJsonViaRegex(self, url, patern, **kwargs):
+        """Loads site and matches patern. The first result is return as dict."""
         r = requests.get(url, **kwargs)
         reg = re.findall(patern, r.text)[0]
         j = json.loads(reg)
         return j
+
+    def loadRegex(self, url, patern, **kwargs):
+        r = requests.get(url, **kwargs)
+        reg = re.findall(patern, r.text)
+        return reg
 
     def getX(self, object):
         """Get x attribute from show as dict."""
