@@ -1,10 +1,7 @@
 from pluginbase import PluginBase
 from pprint import pprint
-from json import loads
-import sys
-import gotit
 from .pipelines import ShowPipeline
-from .dbmanager import getShows, getShowScraperRef
+from .dbmanager import getShowScraperRef
 
 class ScrapeManager(object):
 
@@ -35,7 +32,6 @@ class ScrapeManager(object):
             if insert:
                 self.showPip.insertShow(plugin_name, show)
             pprint(show)
-
 
     def scrapeShows(self):
         for plugin_name in self.plugin_source.list_plugins():

@@ -1,8 +1,8 @@
 # coding: utf-8
 __version__ = '0.1'
 import argparse
-
 from .scrape import ScrapeManager
+
 
 def main():
     parser = argparse.ArgumentParser(add_help=False)
@@ -25,6 +25,7 @@ def normalMode():
 
     s.scrapeShows()
     s.scrapeEpisodes()
+
 
 def debugMode(parser):
     s = ScrapeManager()
