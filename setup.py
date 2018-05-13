@@ -1,7 +1,8 @@
 from distutils.core import setup
 setup(
   name = 'got-it',
-  packages = ['gotit'],
+  packages = ['gotit', 'gotit.extractor_blueprint'],
+  scripts = ['bin/got-it'],
   version = '0.1',
   description = 'Index content on catch-up TV services',
   author = 'Alexander Eisele',
@@ -11,6 +12,9 @@ setup(
   keywords = [''],
   install_requires=[
     'requests>=1.0',
+    'mysql-connector',
+    'SQLAlchemy',
+    'pluginbase',
   ],
   classifiers = [],
 )
