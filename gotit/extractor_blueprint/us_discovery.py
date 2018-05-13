@@ -77,16 +77,16 @@ class Extractor(basic.Extractor):
         url = self.URL_EPISODES.format(seasonID=x_dsc_season_id)
         j = self.loadJson(url, headers=headers)
         for episode in j:
-            #pprint(episode)
-            episode_dict = {
-                "episode_number": episode["episodeNumber"],
-                "season_number": episode["season"]["number"],
-                "name": episode["name"],
-                "url": episode["socialUrl"],
-                "x": {
-                    "authenticated": episode["authenticated"],
-                    "x_dsc_show_id": episode["show"]["id"],
-                    "x_dsc_season_id": episode["season"]["id"],
-                    "x_dsc_episode_id": episode["id"],
-                }}
-            yield episode_dict
+            if not episode["authenticated"]:
+                episode_dict = {
+                    "episode_number": episode["episodeNumber"],
+                    "season_number": episode["season"]["number"],
+                    "name": episode["name"],
+                    "url": episode["socialUrl"],
+                    "x": {
+                        "authenticated": episode["authenticated"],
+                        "x_dsc_show_id": episode["show"]["id"],
+                        "x_dsc_season_id": episode["season"]["id"],
+                        "x_dsc_episode_id": episode["id"],
+                    }}
+                yield episode_dict
