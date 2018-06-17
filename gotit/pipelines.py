@@ -16,7 +16,7 @@ class ShowPipeline(object):
                                   year=show["year"],
                                   lang=show["lang"])
 
-        dbScraper, _ = get_or_create(session, Scraper, string_id=scraper_id)
+        dbScraper, _ = get_or_create(self.Session, Scraper, string_id=scraper_id)
 
         get_or_create(self.Session, ShowScraperRef,
                       scraper_id=dbScraper.id,
