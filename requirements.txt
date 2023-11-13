@@ -5,4 +5,4 @@ mysql-connector==2.2.9
 pluginbase==1.0.0
 requests==2.31.0
 SQLAlchemy==2.0.22
-urllib3==2.0.6
+urllib3==2.1.0
